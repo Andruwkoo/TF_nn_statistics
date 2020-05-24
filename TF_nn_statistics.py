@@ -10,8 +10,22 @@ class ConvLayer():
         return f'Aperture = {self._aperture} | input depth = {self._zin} | filters = {self._zout}'
 
 
-def get_zin(layers : dict, inbound_nodes : dict) -> int:
-    return 0
+def get_layer(layers : list, name : str) -> dict:
+    for l in layers:
+        if l['name'] == name:
+            return l
+    
+    raise IndexError(f'Layer with name {str} does not exist!')
+
+def get_zin(layers : list, inbound_nodes : dict) -> int:
+    in_layer_name = inbound_nodes[0][0][0]
+    if in_layer_name == 'input_1':
+        return 3
+    l = get_layer(layers, in_layer_name)
+    if l['class_name'] == 'Conv2D':
+        return l['config']['filters']
+    else:
+        return get_zin(layers, l['inbound_nodes'])
 
 if __name__ == "__main__":
     fname = "configs/nn_struct_centernet.pkl"
