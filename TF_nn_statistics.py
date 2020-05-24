@@ -7,7 +7,7 @@ class ConvLayer():
         self._zout = zout
     
     def __str__(self):
-        return f'Aperture = {self._aperture} | input depth = {self._zin} | filters = {self._zout}'
+        return f'Aperture = {self._aperture} | input depth = {self._zin:4} | filters = {self._zout:4}'
 
 
 def get_layer(layers : list, name : str) -> dict:
@@ -28,7 +28,7 @@ def get_zin(layers : list, inbound_nodes : dict) -> int:
         return get_zin(layers, l['inbound_nodes'])
 
 if __name__ == "__main__":
-    fname = "configs/nn_struct_centernet.pkl"
+    fname = "configs/nn_struct_yolo4.pkl"
     with open(fname, "rb") as f:
         struct = pickle.load(f)
     
