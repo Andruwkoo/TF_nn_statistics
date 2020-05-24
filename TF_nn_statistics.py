@@ -45,6 +45,18 @@ if __name__ == "__main__":
             zout = l['config']['filters']
             conv_layers.append(ConvLayer(aperture, zin, zout))
 
-    print(layer_types)
+    layers_num = len(conv_layers)
+    tmp = {}
     for l in conv_layers:
-        print(l)
+        if str(l) not in tmp.keys():
+            tmp[str(l)] = 1
+        else:
+            tmp[str(l)] += 1
+
+    conv_layers = tmp
+    print(layer_types)
+    i = 0
+    for l in conv_layers.keys():
+        percents = layers_num/100*conv_layers[l]
+        print(f'{i:3}: {l} => {conv_layers[l]:3} = {percents:5.3}%')
+        i += 1
