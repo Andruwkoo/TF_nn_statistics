@@ -1,4 +1,5 @@
 import pickle
+from pathlib import Path
 
 class ConvLayer():
     def __init__(self, aperture, zin=0, zout=0):
@@ -27,8 +28,9 @@ def get_zin(layers : list, inbound_nodes : dict) -> int:
     else:
         return get_zin(layers, l['inbound_nodes'])
 
-if __name__ == "__main__":
-    fname = "configs/nn_struct_yolo4.pkl"
+def calc_stat(file_name):
+    # fname = "configs/nn_struct_yolo4.pkl"
+    fname = file_name
     with open(fname, "rb") as f:
         struct = pickle.load(f)
     
@@ -57,6 +59,14 @@ if __name__ == "__main__":
     print(layer_types)
     i = 0
     for l in conv_layers.keys():
-        percents = layers_num/100*conv_layers[l]
+        percents = conv_layers[l]/(layers_num/100)
         print(f'{i:3}: {l} => {conv_layers[l]:3} = {percents:5.3}%')
         i += 1
+
+
+if __name__ == "__main__":
+    path = Path.cwd() / "configs/"
+    for net in path.glob('*.pkl'):
+        print(f'Statistics from file {net.name}')
+        calc_stat(net)
+        print("===================================================")
